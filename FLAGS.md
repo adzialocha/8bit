@@ -1,5 +1,5 @@
 # FLAGS
 
-C = Carry
-Z = Zero
-N = Negative
+* C = Carry
+* Z = Zero
+* N = Negative

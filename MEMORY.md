@@ -12,10 +12,13 @@
 - $0020 - $003F (0032 - 0063) Stack (32 Byte)
 - $0040 - $005F (0064 - 0095) LED Display (32 Byte)
 - $0060 - $007F (0096 - 0127) Input (32 Byte)
-- $0080 - $1BFF (0128 - 7167) RAM (7040 Byte)
+- $0080 - $07FF (0128 - 2047) RAM (1920 Byte)
+- $0800 - $1BFF (2048 - 7167) ROM (5120 Byte)
 - $1C00 - $1FFF (7168 - 8191) Kernel (1024 Byte)
 
 ## Zeropage $0000 - $001F
+
+- $0000 - $001F (0000 - 0031) Zeropage
 
 ## Stack $0020 - $003F
 
@@ -30,8 +33,14 @@
 
 ## Input $0060 - $007F
 
-## RAM $0080 - $1BFF
+## RAM $0080 - $07FF
 
-- $0080 - $1BFF (0128 - 7167) Free usable RAM
+- $0080 - $07FF (0128 - 2047) Free usable RAM
+
+## ROM $0800 - $1BFF
+
+- $0800 - $1BFF (2048 - 7167) External ROM slot
 
 ## Kernel $1C00 - $1FFF
+
+- $1C00 - $1FFF (7168 - 8191) Kernel

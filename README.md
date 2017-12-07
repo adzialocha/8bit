@@ -1,2 +1,3 @@
 # 8bit
-Notes of building a 8bit CPU
+
+Notes on building a 8bit CPU.

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>OPCODE EDITOR</title>
+  <style type="text/css">
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+
+      text-rendering: optimizeLegibility;
+    }
+
+    html,
+    body {
+      margin: 0;
+    }
+
+    body,
+    textarea,
+    input,
+    button {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 10px;
+    }
+
+    textarea,
+    button,
+    input {
+      height: 20px;
+
+      background-color: #999;
+
+      border: 0;
+      outline: 0;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    h1 {
+      display: inline;
+
+      font-size: 10px;
+    }
+
+    .panel {
+      display: flex;
+
+      padding: 20px;
+
+      background-color: #efefef;
+
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .list {
+      padding: 0;
+      margin: 0;
+      margin-top: 2px;
+      margin-bottom: 2px;
+
+      list-style: none;
+    }
+
+    .row {
+      display: flex;
+
+      margin-bottom: 2px;
+    }
+
+    .row button {
+      background-color: #eee;
+    }
+
+    .row input {
+      background-color: #eee;
+    }
+
+    .row:nth-child(odd) button {
+      background-color: #ddd;
+    }
+
+    .row:nth-child(odd) input {
+      background-color: #ddd;
+    }
+
+    .row::after {
+      display: block;
+
+      content: "";
+
+      clear: both;
+    }
+
+    .note,
+    .bit {
+      flex: 1;
+
+      display: block;
+
+      float: left;
+    }
+
+    .bit {
+      margin-right: 2px;
+
+      white-space: nowrap;
+    }
+
+    .bit:nth-child(8n+0) {
+      border-right: 1px solid #999;
+    }
+
+    .bit--active {
+      background-color: #00FF00 !important;
+    }
+
+    .note {
+      padding-left: 5px;
+    }
+
+    .result,
+    .monitor {
+      float: left;
+
+      width: 50%;
+      height: 250px;
+    }
+  </style>
+</head>
+<body onload="init()">
+  <div class="panel">
+    <h1>OPCODE Editor</h1>
+    <button onclick="add()">Add</button>
+  </div>
+  <ul class="list" id="list"></ul>
+  <textarea class="result" id="result" readonly></textarea>
+  <textarea class="monitor" id="monitor" readonly></textarea>
+  <script type="text/javascript">
+    const STORAGE_KEY = 'opcodeEditorContent'
+    const DECODER_BITS = [
+      'ARH',
+      'ARL',
+      'R',
+      'W',
+      'DR I',
+      'DR 0',
+      '%',
+      '%',
+
+      'OP$0',
+      'OP I',
+      'PC+1',
+      '%',
+      '%',
+      '%',
+      'SP I',
+      'SP O',
+
+      'PCH O',
+      'PCL O',
+      'PCH I',
+      'PCL I',
+      'BX O',
+      'BX I',
+      'AX O',
+      'AX I',
+    ]
+
+    const elements = {}
+
+    function binToHex(number) {
+      return parseInt(number, 2).toString(16)
+    }
+
+    function decToHex(number) {
+      return parseInt(number).toString(16)
+    }
+
+    function save() {
+      const data = []
+      const items = document.querySelectorAll('.row')
+
+      for (let i = 0; i < items.length; i++) {
+        const rowData = []
+        const bits = items[i].querySelectorAll('.bit')
+
+        for (let y = 0; y < bits.length; y++) {
+          const isActive = bits[y].classList.contains('bit--active')
+          rowData.push(isActive)
+        }
+
+        data.push({
+          bits: rowData,
+          note: items[i].querySelector('.note').value,
+        })
+      }
+
+      const str = JSON.stringify(data)
+      window.localStorage.setItem(STORAGE_KEY, str)
+    }
+
+    function load() {
+      if (!window.localStorage.getItem(STORAGE_KEY)) {
+        return
+      }
+      const data = JSON.parse(window.localStorage.getItem(STORAGE_KEY))
+
+      data.forEach((row) => {
+        add(row.note, row.bits)
+      })
+
+      generate()
+    }
+
+    function pad(str, size) {
+      const padSize = size - str.length
+      let result = str
+      for (let i = 0; i < padSize; i++) {
+        result = '0' + result
+      }
+      return result
+    }
+
+    function init() {
+      elements.list = document.getElementById('list')
+      elements.result = document.getElementById('result')
+      elements.monitor = document.getElementById('monitor')
+
+      elements.result.addEventListener('click', () => {
+        elements.result.setSelectionRange(0, elements.result.value.length)
+      })
+
+      load()
+    }
+
+    function addDecoderBit(index, label, isActive) {
+      const bit = document.createElement('button')
+
+      bit.classList.add('bit')
+      bit.innerText = label
+
+      if (typeof isActive === 'boolean' && isActive) {
+        bit.classList.add('bit--active')
+      }
+
+      bit.addEventListener('click', () => {
+        bit.classList.toggle('bit--active')
+        update()
+      })
+
+      return bit
+    }
+
+    function add(note, bits) {
+      const row = document.createElement('li')
+      row.classList.add('row')
+
+      DECODER_BITS.forEach((label, index) => {
+        let isActive = undefined
+        if (bits) {
+          isActive = bits[index]
+        }
+        const bit = addDecoderBit(index, label, isActive)
+        row.appendChild(bit)
+      })
+
+      const input = document.createElement('input')
+      input.classList.add('note')
+      input.addEventListener('keyup', () => {
+        update()
+      })
+      if (typeof note === 'string') {
+        input.value = note
+      }
+
+      row.appendChild(input)
+
+      const remove = document.createElement('button')
+      remove.innerText = 'X'
+      remove.addEventListener('click', () => {
+        elements.list.removeChild(row)
+        update()
+      })
+
+      row.appendChild(remove)
+
+      elements.list.appendChild(row)
+
+      update()
+    }
+
+    function generate() {
+      const items = document.querySelectorAll('.row')
+
+      let result = ''
+      let monitor = ''
+
+      for (let i = 0; i < items.length; i++) {
+        let rowMonitor = ''
+
+        const bits = items[i].querySelectorAll('.bit')
+
+        for (let y = 0; y < bits.length; y++) {
+          const isActive = bits[y].classList.contains('bit--active')
+          rowMonitor += isActive ? '1' : '0'
+        }
+
+        const address = pad(decToHex(i), 2)
+
+        const note = items[i].querySelector('.note')
+
+        let label = ''
+        if (note.value.length > 0 && note.value[0] === '[') {
+          const matches = note.value.match(/\[(.*?)\]/)
+          label = matches && matches.length > 0 ? note.value.match(/\[(.*?)\]/)[1] : ''
+        }
+
+        result += `${pad(binToHex(rowMonitor), 6)}\n`
+        monitor += `$${address} $${pad(binToHex(rowMonitor), 6)} ${rowMonitor} ${label}\n`
+      }
+
+      elements.result.innerText = result
+      elements.monitor.innerText = monitor
+    }
+
+    function update() {
+      generate()
+      save()
+    }
+  </script>
+</body>
+</html>

@@ -36,7 +36,7 @@
 * `ldb $nn`
 
 * `sta $nn`
-* `sta $nn,b`
+* `stb $nn,a`
 * `stb $nn`
 
 * `tab` transfer from AX to BX
@@ -44,8 +44,10 @@
 
 ### Math
 
-* `add` add (with carry)
-* `sub` substract (with borrow)
+* `adc #$nn` AX = AX + $nn
+* `adc $nn` AX = AX + {$nn}
+* `sbc #$nn` AX = AX - $nn
+* `sbc $nn` AX = AX - {$nn}
 * `inc` increment AX
 * `dec` decrement AX
 

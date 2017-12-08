@@ -313,11 +313,7 @@
 
         const note = items[i].querySelector('.note')
 
-        let label = ''
-        if (note.value.length > 0 && note.value[0] === '[') {
-          const matches = note.value.match(/\[(.*?)\]/)
-          label = matches && matches.length > 0 ? note.value.match(/\[(.*?)\]/)[1] : ''
-        }
+        let label = note.value
 
         result += `${pad(binToHex(rowMonitor), 6)}\n`
         monitor += `$${address} $${pad(binToHex(rowMonitor), 6)} ${rowMonitor} ${label}\n`

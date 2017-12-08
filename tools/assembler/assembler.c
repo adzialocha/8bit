@@ -55,7 +55,7 @@ typedef struct
 
     int a_abs;          // Absolute  $00
     int a_imm;          // Immediate #$00
-    int a_idx;          // Indexed   $00,b
+    int a_idx;          // Indexed   $00,a
     // int a_ind;       // Indirect  ($00) @TODO
 
     int a_label;        // Labelled
@@ -91,8 +91,8 @@ static const opcode OPCODES[] =
     { "rol", 0x00, 0x1c, 0x1d, 0x00, 0x00 },
     { "ror", 0x00, 0x1e, 0x1f, 0x00, 0x00 },
     { "rts", 0x3d, 0x00, 0x00, 0x00, 0x00 },
-    { "sta", 0x00, 0x22, 0x23, 0x40, 0x00 },
-    { "stb", 0x00, 0x24, 0x25, 0x00, 0x00 },
+    { "sta", 0x00, 0x22, 0x23, 0x00, 0x00 },
+    { "stb", 0x00, 0x24, 0x25, 0x40, 0x00 },
     { "sub", 0x00, 0x26, 0x27, 0x00, 0x00 },
     { "tab", 0x00, 0x28, 0x29, 0x00, 0x00 },
     { "tba", 0x00, 0x2a, 0x2b, 0x00, 0x00 }
@@ -387,7 +387,7 @@ int main (int argc, char **argv)
                         OPCODES[opcode_index].a_idx &&
                         token[0] == '$' &&
                         token[strlen(token) - 2] == ',' &&
-                        token[strlen(token) - 1] == 'b'
+                        token[strlen(token) - 1] == 'a'
                     ) ||
                     (
                         OPCODES[opcode_index].a_abs &&

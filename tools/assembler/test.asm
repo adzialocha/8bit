@@ -15,17 +15,17 @@ jmp main
 ; Routine: Spieler zeichnen
 
 draw:
-  ldb $00         ; Lade Spieler-Position in BX
-  lda #$01        ; Lade Farbe Weiß in AX
-  sta $fe,b       ; Zeiche Spieler mit Farbe aus AX an Position BX
+  lda $00         ; Lade Spieler-Position in AX
+  ldb #$01        ; Lade Farbe Weiß in BX
+  stb $fe,a       ; Zeiche Spieler mit Farbe aus BX an Position AX
 rts
 
 ; Routine: Spieler löschen
 
 clear:
-  ldb $00         ; Lade Spieler-Position in BX
-  lda #$00        ; Lade Farbe Schwarz in AX
-  sta $fe,b       ; Schreibe schwarz (leer) an Stelle des Spielers
+  lda $00         ; Lade Spieler-Position in AX
+  ldb #$00        ; Lade Farbe Schwarz in BX
+  stb $fe,a       ; Schreibe schwarz (leer) an Stelle des Spielers
 rts
 
 ; Routine: Überprüfe Tastatur-Eingabe

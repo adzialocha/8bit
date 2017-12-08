@@ -1,7 +1,10 @@
 # Microcode
 
-## Adress-Bus
+## Address bus
 
+Length: 24 bit (3 byte)
+
+```
 * 23 OP/I  (CU)
 * 22 PC/I  (PC)
 * 21 PC/O  (PC)
@@ -28,8 +31,11 @@
 * 02 SP/O  (SP)
 * 01 %     ()
 * 00 %     ()
+```
 
-## Hauptroutine
+## Instructions
+
+#### fetch & decode cycle
 
 ```
 $00 $280000 001010000000000000000000 AR := PC                 ; fetch
@@ -40,49 +46,34 @@ $04 $150000 000101010000000000000000 DR := {AR} & PC := PC+1
 $05 $ffffff 111111111111111111111111                          ; decode
 ```
 
-## lda #$nn (imm)
+#### lda #$nn (imm)
 
 ```
 $06 $008080 000000001000000010000000 AX := DR
 $07 $000000 000000000000000000000000 OP := $00                ; execute
 ```
 
-## LDA $nn (abs)
+#### lda $nn (abs)
 
 ```
-ARL := DR
-ARH := $00
-DR := {ARL}
-AX := DR
-OP := $00        ; execute
+$08 $088000 000010001000000000000000 AR := DR
+$09 $050000 000001010000000000000000 DR := {AR}
+$0a $008080 000000001000000010000000 AX := DR
+$0b $000000 000000000000000000000000 OP := $00                ; execute
 ```
 
-## STA $nn (abs)
+#### ldb #$nn (imm)
 
 ```
-ARL := DR
-DR := AX
-{ARL} := DR
-OP := $00        ; execute
+$0c $008020 000000001000000000100000 BX := DR
+$0d $000000 000000000000000000000000 OP := $00                ; execute
 ```
 
----
+#### ldb $nn (abs)
 
 ```
-; STA $nnnn
-
-ARL := SP        ; push operand to stack
-{ARL} := DR
-PC := PC + 1 *   ; fetch next operand
-ARL := PCL
-ARH := PCH
-DR := {AR}
-ARH := DR        ; use 2. operand for high
-ARL := SP        ; pop 1. operand from stack for low
-SP := SP - 1
-DR := {ARL}
-ARL := DR
-DR := AX         ; store AX
-{AR} := DR
-OP := $00        ; execute
+$0e $088000 000010001000000000000000 BX := DR
+$0f $050000 000001010000000000000000 DR := {AR}
+$10 $008020 000000001000000000100000 BX := DR
+$11 $000000 000000000000000000000000 OP := $00                ; execute
 ```

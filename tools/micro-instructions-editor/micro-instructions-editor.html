@@ -142,32 +142,32 @@
   <script type="text/javascript">
     const STORAGE_KEY = 'microInstructionsEditor'
     const DECODER_BITS = [
-      'ARH',
-      'ARL',
+      'OP/I',
+      'PC/I',
+      'PC/O',
+      '+1',
+      'AR/I',
       'R',
       'W',
-      'DR I',
-      'DR 0',
+      'DR/I',
+
+      'DR/O',
+      '%',
+      '%',
+      '%',
+      '%',
+      '%',
       '%',
       '%',
 
-      'OP$0',
-      'OP I',
-      'PC+1',
+      'AX/I',
+      'AX/O',
+      'BX/I',
+      'BX/O',
+      'SP/I',
+      'SP/O',
       '%',
       '%',
-      '%',
-      'SP I',
-      'SP O',
-
-      'PCH O',
-      'PCL O',
-      'PCH I',
-      'PCL I',
-      'BX O',
-      'BX I',
-      'AX O',
-      'AX I',
     ]
 
     const elements = {}

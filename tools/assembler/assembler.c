@@ -155,7 +155,7 @@ void remove_comments (char *str)
 
 
 /*
- * Function: remove_comments
+ * Function: is_hex_str
  * ------
  * Checks if string holds only symbols describing a hexadecimal number
  *

@@ -1,32 +1,55 @@
 # Microcode
 
+## Adress-Bus
+
+* 23 OP/I  (CU)
+* 22 PC/I  (PC)
+* 21 PC/O  (PC)
+* 20 +1    (PC)
+* 19 AR/I  (RAM)
+* 18 R     (RAM)
+* 17 W     (RAM)
+* 16 DR/I  (RAM)
+
+* 15 DR/O  (RAM)
+* 14 %     ()
+* 13 %     ()
+* 12 %     ()
+* 11 %     ()
+* 10 %     ()
+* 09 %     ()
+* 08 %     ()
+
+* 07 AX/I  (AX)
+* 06 AX/O  (AX)
+* 05 BX/I  (BX)
+* 04 BX/O  (BX)
+* 03 SP/I  (SP)
+* 02 SP/O  (SP)
+* 01 %     ()
+* 00 %     ()
+
+## Hauptroutine
+
 ```
-; Hauptroutine
-; Fetch Address
-
-AR := PC
-DR := {AR}
-OP := DR
-
-; Fetch Operand
-
-PC := PC + 1 *
-AR := PC
-DR := {AR}
-
-; Decode
+$00 $280000 001010000000000000000000 AR := PC                 ; fetch
+$01 $050000 000001010000000000000000 DR := {AR}
+$02 $908000 100100001000000000000000 OP := DR & PC := PC+1
+$03 $280000 001010000000000000000000 AR := PC                 ; fetch operands
+$04 $150000 000101010000000000000000 DR := {AR} & PC := PC+1
+$05 $ffffff 111111111111111111111111                          ; decode
 ```
 
-```
-; LDA #$nn
-
-AX := DR
-OP := $00        ; execute
-```
+## lda #$nn (imm)
 
 ```
-; LDA $nn
+$06 $008080 000000001000000010000000 AX := DR
+$07 $000000 000000000000000000000000 OP := $00                ; execute
+```
 
+## LDA $nn (abs)
+
+```
 ARL := DR
 ARH := $00
 DR := {ARL}
@@ -34,29 +57,16 @@ AX := DR
 OP := $00        ; execute
 ```
 
-```
-; LDA $nnnn
-
-AX := DR
-PC := PC + 1 *
-ARL := PCL
-ARH := PCH
-DR := {AR}
-ARL := AX
-ARH := DR
-DR := {AR}
-AX := DR
-OP := $00        ; execute
-```
+## STA $nn (abs)
 
 ```
-; STA $nn
-
 ARL := DR
 DR := AX
 {ARL} := DR
 OP := $00        ; execute
 ```
+
+---
 
 ```
 ; STA $nnnn

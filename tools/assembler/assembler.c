@@ -6,7 +6,7 @@
  *
  * Compile project via: clang assembler.c -o assembler
  *
- * Usage: ./assembler program.asm program.o
+ * Usage: ./assembler program.asm program.out
  */
 
 #include <ctype.h>
@@ -296,16 +296,18 @@ void print_and_save_program (FILE *file, int *program, int size)
 
     for (i = 0; i < size; i++)
     {
-        fprintf(file, "%02x ", program[i]);
+        fprintf(file, "%02x", program[i]);
         printf("%02x", program[i]);
 
         // Pretty print for screen
         if (i % 16 == 15)
         {
+            fprintf(file, "\n");
             printf("\n");
         }
         else
         {
+            fprintf(file, " ");
             printf(" ");
         }
     }
@@ -318,7 +320,7 @@ void print_and_save_program (FILE *file, int *program, int size)
  * Reads a 8bit cpu assembler file and writes a compiled executable
  * for our architecture.
  *
- * Usage: ./assembler program.asm program.o
+ * Usage: ./assembler program.asm program.out
  */
 
 int main (int argc, char **argv)

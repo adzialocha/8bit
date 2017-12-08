@@ -48,8 +48,8 @@
 * `adc $nn` AX = AX + {$nn}
 * `sbc #$nn` AX = AX - $nn
 * `sbc $nn` AX = AX - {$nn}
-* `inc` increment AX
-* `dec` decrement AX
+* `inc` AX = AX + 1
+* `dec` AX = AX - 1
 
 ### Bitwise
 

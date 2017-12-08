@@ -223,6 +223,7 @@ int find_opcode_index (char *mnemonic)
 void handle_opcode (int *program, int index, int op)
 {
     program[index] = OPCODES[op].a;
+    program[index + 1] = 0x00;
 }
 
 
@@ -481,7 +482,7 @@ int main (int argc, char **argv)
                             op
                         );
 
-                        program_adr += 1;
+                        program_adr += 2;
                     }
                 }
                 else if (token[(strlen(token) - 1)] == ':')

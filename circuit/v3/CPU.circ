@@ -503,7 +503,8 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
 280000 50000 908000 280000 150000 ffffff 8080 0
 88000 50000 8080 0 8020 0 88000 50000
 8020 0 88000 10040 28000 0 8002 80001
-10040 28000 0 88000 10010 28000
+10040 28000 0 88000 10010 28000 0 60
+0 90
 </a>
     </comp>
     <comp lib="1" loc="(190,290)" name="NOT Gate">

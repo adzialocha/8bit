@@ -1,8 +1,16 @@
-# OPCODES
+# Opcodes
 
 ## Layout
 
-16bit
+8bit (instruction)
+
+```
+| --------- | --------- |
+| 0000 0000 | Adresse   |
+| --------- | --------- |
+```
+
+16bit (instruction + operand)
 
 ```
 | --------- | --------- |
@@ -11,63 +19,63 @@
 | --------- | --------- |
 ```
 
-## Addressing methods
+## Addressing modes
 
-```
-* Absolute  (abs) $nn
-* Immediate (imm) #$nn
-```
+* Absolute (abs) `$nn`
+* Immediate (imm) `#$nn`
+* Indexed (idx) `$nn,b`
+* Indirect (ind) `($nn)`
 
 ## Opcodes
 
 ### Storage
 
-* `LDA #$nn`
-* `LDA $nn`
-* `LDB #$nn`
-* `LDB $nn`
+* `lda #$nn`
+* `lda $nn`
+* `ldb #$nn`
+* `ldb $nn`
 
-* `STA $nn`
-* `STB $nn`
-* `STB $nn,B`
+* `sta $nn`
+* `stb $nn`
+* `stb $nn,b`
 
-* `TAB` transfer from AX to BX
-* `TBA` transfer from BX to AX
+* `tab` transfer from AX to BX
+* `tba` transfer from BX to AX
 
 ### Math
 
-- `ADD` add (with carry)
-- `SUB` substract (with borrow)
-- `INC` increment AX
-- `DEC` decrement AX
+* `add` add (with carry)
+* `sub` substract (with borrow)
+* `inc` increment AX
+* `dec` decrement AX
 
 ### Bitwise
 
-- `AND` logical AND
-- `EOR` exclusive OR
-- `ORA` inclusive OR with AX
-- `LSL` logical shift left
-- `LSR` logical shift right
-- `ASL` arithmetic shift left
-- `ROL` rotate left one bit
-- `ROR` rotate right one bit
+* `and` logical AND
+* `eor` exclusive OR
+* `ora` inclusive OR with AX
+* `lsl` logical shift left
+* `lsr` logical shift right
+* `asl` arithmetic shift left
+* `rol` rotate left one bit
+* `ror` rotate right one bit
 
 ### Branch
 
-- `BEQ $nn` branch on zero flag
+* `beq $nn` branch on zero flag
 
 ### Registers
 
-- `CMP $nn` compare M to AX
-- `CMP #$nn` compare M to AX
+* `cmp $nn` compare M to AX
+* `cmp #$nn` compare M to AX
 
 ### Stack
 
-- `PHA` push AX on stack
-- `PLA` pull AX from stack
+* `pha` push AX on stack
+* `pla` pull AX from stack
 
 ### Jump
 
-- `JMP $nn` jump to location
-- `JSR $nn` jump to location and save return address
-- `RTS` return from subroutine
+* `jmp $nn` jump to location
+* `jsr $nn` jump to location and save return address
+* `rts` return from subroutine

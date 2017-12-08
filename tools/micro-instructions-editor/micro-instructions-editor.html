@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>OPCODE EDITOR</title>
+  <title>Micro instructions editor</title>
   <style type="text/css">
     *,
     *::before,
@@ -133,14 +133,14 @@
 </head>
 <body onload="init()">
   <div class="panel">
-    <h1>OPCODE Editor</h1>
+    <h1>Micro instructions editor</h1>
     <button onclick="add()">Add</button>
   </div>
   <ul class="list" id="list"></ul>
   <textarea class="result" id="result" readonly></textarea>
   <textarea class="monitor" id="monitor" readonly></textarea>
   <script type="text/javascript">
-    const STORAGE_KEY = 'opcodeEditorContent'
+    const STORAGE_KEY = 'microInstructionsEditor'
     const DECODER_BITS = [
       'ARH',
       'ARL',

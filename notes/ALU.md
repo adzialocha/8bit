@@ -7,7 +7,7 @@
 * C/O: Carry Out / Übertrag Flag (1bit)
 * OP: Operation (4bit)
 
-## OPCODEs
+## Opcodes
 
 `0000` Z = X + Y
 `0001` Z = X - Y

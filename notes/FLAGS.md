@@ -1,4 +1,4 @@
-# FLAGS
+# Flags
 
 * C = Carry
 * Z = Zero

@@ -1,3 +1,14 @@
+/*
+ * assembler.c
+ * ------
+ * Reads a 8bit cpu assembler file and writes a compiled executable
+ * for our architecture.
+ *
+ * Compile project via: clang assembler.c -o assembler
+ *
+ * Usage: ./assembler program.asm program.o
+ */
+
 #include <ctype.h>
 #include <stdbool.h>
 #include <stdio.h>

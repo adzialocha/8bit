@@ -1,4 +1,4 @@
-# MEMORY
+# Memory
 
 ## Register
 

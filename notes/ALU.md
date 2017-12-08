@@ -14,6 +14,7 @@
 * `0010` Z = X AND Y
 * `0011` Z = X OR Y
 * `0100` Z = X XOR Y
+
 * `0101` Z = X logically shifted left
 * `0110` Z = X logically shifted right
 * `0111` Z = X arithmetically shifted left

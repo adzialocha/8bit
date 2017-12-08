@@ -2,15 +2,7 @@
 
 ## Layout
 
-8bit (instruction)
-
-```
-| --------- | --------- |
-| 0000 0000 | Adresse   |
-| --------- | --------- |
-```
-
-16bit (instruction + operand)
+16bit (instruction [+ operand])
 
 ```
 | --------- | --------- |
@@ -53,14 +45,18 @@
 
 ### Bitwise
 
-* `and` logical AND
-* `eor` exclusive OR
-* `ora` inclusive OR with AX
-* `lsl` logical shift left
-* `lsr` logical shift right
-* `asl` arithmetic shift left
-* `rol` rotate left one bit
-* `ror` rotate right one bit
+* `and #$nn` AX = AX AND $nn
+* `and $nn` AX = AX AND {$nn}
+* `ora #$nn` AX = AX OR $nn
+* `ora $nn` AX = AX OR {$nn}
+* `eor #$nn` AX = AX XOR $nn
+* `eor $nn` AX = AX XOR {$nn}
+
+* `lsl` AX logical shift left
+* `lsr` AX logical shift right
+* `asl` AX arithmetic shift left
+* `rol` AX rotate left one bit
+* `ror` AX rotate right one bit
 
 ### Branch
 

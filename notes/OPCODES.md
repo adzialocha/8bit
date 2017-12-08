@@ -36,8 +36,8 @@
 * `ldb $nn`
 
 * `sta $nn`
+* `sta $nn,b`
 * `stb $nn`
-* `stb $nn,b`
 
 * `tab` transfer from AX to BX
 * `tba` transfer from BX to AX

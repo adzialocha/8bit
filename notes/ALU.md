@@ -1,13 +1,14 @@
 # ALU
 
-* **X**: Variable (8bit)
-* **Y**: Variable (8bit)
-* **Z**: Ergebnis (8bit)
+* **X**: Variable X (8bit)
+* **Y**: Variable Y (AX) (8bit)
+* **Z**: Result Z (8bit)
+* **1**: Constant 1 on X Flag (1bit)
 * **C/I**: Carry Flag (1bit)
-* **C/O**: Carry Out / Übertrag Flag (1bit)
+* **C/O**: Carry Out Flag (1bit)
 * **OP**: Operation (4bit)
 
-## Opcodes
+## Operations
 
 * `0000` Z = X + Y
 * `0001` Z = X - Y
@@ -15,8 +16,8 @@
 * `0011` Z = X OR Y
 * `0100` Z = X XOR Y
 
-* `0101` Z = X logically shifted left
-* `0110` Z = X logically shifted right
-* `0111` Z = X arithmetically shifted left
-* `1000` Z = X rotated left
-* `1001` Z = X rotated right
+* `0101` Z = Y logically shifted left
+* `0110` Z = Y logically shifted right
+* `0111` Z = Y arithmetically shifted left
+* `1000` Z = Y rotated left
+* `1001` Z = Y rotated right

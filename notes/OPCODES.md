@@ -15,7 +15,7 @@
 
 * Absolute (abs) `$nn`
 * Immediate (imm) `#$nn`
-* Indexed (idx) `$nn,b`
+* Indexed (idx) `$nn,a`
 * Indirect (ind) `($nn)`
 
 ## Opcodes
@@ -60,12 +60,22 @@
 
 ### Branch
 
-* `beq $nn` branch on zero flag
+* `bpl $nn` branch on plus (N)
+* `bmi $nn` branch on minus (N)
+* `bcc $nn` branch on carry clear (C)
+* `bcs $nn` branch on carry set (C)
+* `bne $nn` branch on not equal (Z)
+* `beq $nn` branch on equal (Z)
+
+### Flags
+
+* `sec` set carry flag
+* `clc` clear carry flag
 
 ### Registers
 
-* `cmp $nn` compare M to AX
-* `cmp #$nn` compare M to AX
+* `cmp $nn` compare {$nn} to AX
+* `cmp #$nn` compare $nn to AX
 
 ### Stack
 

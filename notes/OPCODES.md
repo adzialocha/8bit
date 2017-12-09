@@ -26,11 +26,9 @@
 * `lda $nn`
 * `ldb #$nn`
 * `ldb $nn`
-
 * `sta $nn`
 * `stb $nn,a`
 * `stb $nn`
-
 * `tab` transfer from AX to BX
 * `tba` transfer from BX to AX
 
@@ -51,7 +49,6 @@
 * `ora $nn` AX = AX OR {$nn}
 * `eor #$nn` AX = AX XOR $nn
 * `eor $nn` AX = AX XOR {$nn}
-
 * `lsl` AX logical shift left
 * `lsr` AX logical shift right
 * `asl` AX arithmetic shift left

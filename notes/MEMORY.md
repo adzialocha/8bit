@@ -44,9 +44,9 @@ Arbeitsregister um 8bit Werte kurzzeitig festzuhalten.
 
 ## Tasten
 
-- $01 : Pfeil Oben
-- $02 : Pfeil Rechts
-- $03 : Pfeil Unten
-- $04 : Pfeil Links
-- $05 : Taste A
-- $06 : Taste B
+- $00 (000) : Pfeil Oben
+- $01 (001) : Pfeil Links
+- $02 (010) : Pfeil Unten
+- $03 (011) : Pfeil Rechts
+- $04 (100) : Taste B
+- $05 (101) : Taste A

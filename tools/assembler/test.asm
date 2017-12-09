@@ -3,7 +3,7 @@
 ; Initialisierung
 
 lda #$00
-sta $00           ; Spieler Position
+sta $c0           ; Spieler Position
 
 ; Haupt-Routine
 
@@ -15,53 +15,53 @@ jmp main
 ; Routine: Spieler zeichnen
 
 draw:
-  lda $00         ; Lade Spieler-Position in AX
+  lda $c0         ; Lade Spieler-Position in AX
   ldb #$ff        ; Lade Farbe Weiß in BX
-  stb $fe,a       ; Zeiche Spieler mit Farbe aus BX an Position AX
+  stb $e0,a       ; Zeiche Spieler mit Farbe aus BX an Position AX
 rts
 
 ; Routine: Spieler löschen
 
 clear:
-  lda $00         ; Lade Spieler-Position in AX
+  lda $c0         ; Lade Spieler-Position in AX
   ldb #$00        ; Lade Farbe Schwarz in BX
-  stb $fe,a       ; Schreibe schwarz (leer) an Stelle des Spielers
+  stb $e0,a       ; Schreibe schwarz (leer) an Stelle des Spielers
 rts
 
 ; Routine: Überprüfe Tastatur-Eingabe
 
 check_input:
   lda $fe         ; Tastaturbuffer abfragen
-  cmp #$03        ; "<"?
+  cmp #$01        ; "<"?
   beq left
-  cmp #$01        ; ">"?
+  cmp #$03        ; ">"?
   beq right
   jmp main        ; .. zurück zum Hauptprogramm wenn nichts passiert ist
 
 left:
   cib             ; Clear input buffer
   jsr clear       ; Lösche letzte Position auf Bildschirm
-  lda $00         ; Lade aktuelle Position in A
+  lda $c0         ; Lade aktuelle Position in A
   dec             ; .. um Zahl um 1 zu verringern
   cmp #$df        ; Haben wir den linken Rand erreicht?
   beq left_border
-  sta $00         ; Speichere neue Position
+  sta $c0         ; Speichere neue Position
   jmp main
 left_border:
   lda #$0         ; Setze Position auf maximalen linken Rand
-  sta $00
+  sta $e0
   jmp main
 
 right:
   cib             ; Clear input buffer
   jsr clear       ; Lösche letzte Position auf Bildschirm
-  lda $00         ; Lade aktuelle Position in A
+  lda $c0         ; Lade aktuelle Position in A
   inc             ; .. um Zahl um 1 zu erhöhen
-  cmp #$f0        ; haben wir den rechten Rand erreicht?
+  cmp #$f8        ; haben wir den rechten Rand erreicht?
   beq right_border
-  sta $00         ; Speichere neue Position
+  sta $c0         ; Speichere neue Position
   jmp main
 right_border:
-  lda #$ef        ; Setze Position auf maximalen rechten Rand
-  sta $00
+  lda #$f7        ; Setze Position auf maximalen rechten Rand
+  sta $c0
   jmp main

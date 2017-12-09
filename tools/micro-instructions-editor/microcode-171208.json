@@ -675,7 +675,7 @@
       true,
       false,
       false,
-      false,
+      true,
       false,
       false,
       false,
@@ -693,36 +693,7 @@
       false,
       true
     ],
-    "note": "AR := Z"
-  },
-  {
-    "bits": [
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      true,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      true,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false
-    ],
-    "note": "DR := AX"
+    "note": "AR := Z & DR := Z"
   },
   {
     "bits": [
@@ -781,6 +752,35 @@
       false
     ],
     "note": "; execute"
+  },
+  {
+    "bits": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "note": "; empty line"
   },
   {
     "bits": [
@@ -4696,6 +4696,64 @@
       false
     ],
     "note": "PC := DR"
+  },
+  {
+    "bits": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "note": "; execute"
+  },
+  {
+    "bits": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "note": "[cib] ; clear input buffer"
   },
   {
     "bits": [

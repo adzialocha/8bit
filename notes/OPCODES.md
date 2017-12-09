@@ -80,7 +80,7 @@
 ### Stack
 
 * `pha` push AX on stack
-* `pla` pull AX from stack
+* `pop` pop stack top to AX
 
 ### Jump
 

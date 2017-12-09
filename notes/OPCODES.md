@@ -74,8 +74,8 @@
 
 ### Registers
 
-* `cmp $nn` compare {$nn} to AX
 * `cmp #$nn` compare $nn to AX
+* `cmp $nn` compare {$nn} to AX
 
 ### Stack
 

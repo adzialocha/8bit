@@ -15,8 +15,8 @@ Length: 24 bit (3 byte)
 * 16 DR/I  (RAM)
 
 * 15 DR/O  (RAM)
-* 14 BM    (Branch Mode Flag)
-* 13 %     (unused)
+* 14 BM    (Branch Mode Flag *)
+* 13 I/CLR (Clear I/O buffer *)
 * 12 1     (ALU)
 * 11 OP3   (ALU)
 * 10 OP2   (ALU / CCR when BM set)
@@ -432,4 +432,13 @@ $9f $080009 000010000000000000001001 SP := Z & AR := Z        ; get address from
 $a0 $050000 000001010000000000000000 DR := {AR}
 $a1 $400000 010000000000000000000000 PC := DR                 ; jump to address
 $a2 $000000 000000000000000000000000                          ; execute
+```
+
+### Special
+
+#### cib
+
+```
+$a3 $002000 000000000010000000000000                          ; clear input buffer
+$a4 $000000 000000000000000000000000                          ; execute
 ```

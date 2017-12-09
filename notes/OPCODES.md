@@ -86,3 +86,7 @@
 * `jsr $nn` jump to location $nn and save return address
 * `jsr {$nn}` jump to location {$nn} and save return address
 * `rts` return from subroutine
+
+### Special
+
+* `cib` clear input buffer

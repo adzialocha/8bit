@@ -16,7 +16,7 @@ jmp main
 
 draw:
   lda $00         ; Lade Spieler-Position in AX
-  ldb #$01        ; Lade Farbe Weiß in BX
+  ldb #$ff        ; Lade Farbe Weiß in BX
   stb $fe,a       ; Zeiche Spieler mit Farbe aus BX an Position AX
 rts
 
@@ -31,20 +31,15 @@ rts
 ; Routine: Überprüfe Tastatur-Eingabe
 
 check_input:
-  lda $ff         ; Tastaturbuffer abfragen
-  cmp #$04        ; "<"?
+  lda $fe         ; Tastaturbuffer abfragen
+  cmp #$03        ; "<"?
   beq left
-  cmp #$02        ; ">"?
+  cmp #$01        ; ">"?
   beq right
   jmp main        ; .. zurück zum Hauptprogramm wenn nichts passiert ist
 
-clear_input:
-  lda #0          ; Tastaturbuffer ..
-  sta $ff         ; .. löschen
-rts
-
 left:
-  jsr clear_input
+  cib             ; Clear input buffer
   jsr clear       ; Lösche letzte Position auf Bildschirm
   lda $00         ; Lade aktuelle Position in A
   dec             ; .. um Zahl um 1 zu verringern
@@ -58,7 +53,7 @@ left_border:
   jmp main
 
 right:
-  jsr clear_input
+  cib             ; Clear input buffer
   jsr clear       ; Lösche letzte Position auf Bildschirm
   lda $00         ; Lade aktuelle Position in A
   inc             ; .. um Zahl um 1 zu erhöhen

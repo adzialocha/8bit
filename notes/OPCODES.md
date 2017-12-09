@@ -84,6 +84,8 @@
 
 ### Jump
 
-* `jmp $nn` jump to location
-* `jsr $nn` jump to location and save return address
+* `jmp #$nn` jump to location $nn
+* `jmp $nn` jump to location {$nn}
+* `jsr $nn` jump to location $nn and save return address
+* `jsr {$nn}` jump to location {$nn} and save return address
 * `rts` return from subroutine

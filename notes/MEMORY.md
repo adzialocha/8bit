@@ -29,27 +29,18 @@ Arbeitsregister um 8bit Werte kurzzeitig festzuhalten.
 * CLK: Takt
 * RST: Zurücksetzen-Flag
 
-## Speicher Organisation
+## Organisation
 
-- $00 - $CF (000 - 207) Freier Speicher (208 Byte)
-- $D0 - $DF (208 - 223) Stack (16 Byte)
-- $E0 - $EF (224 - 239) 4x4 Pixel Display (16 Byte)
-- $F0 (240) % (1 Byte)
-- $F1 (241) % (1 Byte)
-- $F2 (242) % (1 Byte)
-- $F3 (243) % (1 Byte)
-- $F4 (244) % (1 Byte)
-- $F5 (245) % (1 Byte)
-- $F6 (246) % (1 Byte)
-- $F7 (247) % (1 Byte)
-- $F8 (248) % (1 Byte)
+- $00 - $CF (000 - 207) free usable memory (208 Byte)
+- $D0 - $DF (208 - 223) stack (16 Byte)
+- $E0 - $F8 (224 - 248) 5x5 Pixel Display (25 Byte)
 - $F9 (249) % (1 Byte)
 - $FA (250) % (1 Byte)
 - $FB (251) % (1 Byte)
 - $FC (252) % (1 Byte)
 - $FD (253) % (1 Byte)
-- $FE (254) % (1 Byte)
-- $FF (255) Aktuell gedrückte Taste (1 Byte)
+- $FE (254) currently pressed key (1 Byte)
+- $FF (255) random number (1 Byte)
 
 ## Tasten
 

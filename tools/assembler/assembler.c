@@ -250,7 +250,7 @@ void handle_opcode_and_operand (int *program, int index, int op, char *addr)
 {
     char* stripped_addr;
 
-    if (addr[0] == '#')
+    if (addr[0] == '#' && addr[strlen(addr) - 2] != ',')
     {
         // Immediate adressing mode
         program[index] = OPCODES[op].a_imm;
@@ -260,7 +260,7 @@ void handle_opcode_and_operand (int *program, int index, int op, char *addr)
     {
         // Indexed adressing mode
         program[index] = OPCODES[op].a_idx;
-        stripped_addr = addr + 1;
+        stripped_addr = addr + 2;
         stripped_addr[strlen(stripped_addr) - 2] = 0;
     }
     else
@@ -397,18 +397,19 @@ int main (int argc, char **argv)
                 (
                     (
                         OPCODES[opcode_index].a_idx &&
-                        token[0] == '$' &&
+                        token[0] == '#' &&
+                        token[1] == '$' &&
                         token[strlen(token) - 2] == ',' &&
                         token[strlen(token) - 1] == 'a'
                     ) ||
                     (
                         OPCODES[opcode_index].a_abs &&
-                        token[0] == '$' &&
-                        token[strlen(token) - 2] != ','
+                        token[0] == '$'
                     ) ||
                     (
                         OPCODES[opcode_index].a_imm &&
-                        token[0] == '#'
+                        token[0] == '#' &&
+                        token[strlen(token) - 2] != ','
                     )
                 )
                 {

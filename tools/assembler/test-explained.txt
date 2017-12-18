@@ -1,50 +1,49 @@
-; Initialisierung
+v2.0 raw
 
-06 00 ; lda #$00
-12 00 ; sta $00
+06 00 ; initialize
+12 c0
 
-; Haupt-Routine
+8a 0a ; main
+84 1a
+84 04
 
-8a 0a ; jsr draw ($0a) (label "main" @ $04)
-84 1a ; jmp check_input ($1a)
-84 04 ; jmp main ($04)
-
-; Routine: Spieler zeichnen
-
-08 00 ; lda $00 (label "draw" @ $0a)
-0e ff ; ldb #$ff
-16 fe ; stb $fe,a
-9d 00 ; rts
-
-08 00
-0e 00
-16 fe
+08 c0 ; draw
+0c ff
+16 e0
 9d 00
-08 fe
-70 03
-6a 26
+
+08 c0 ; clear
+0c 00
+16 e0
+9d 00
+
+08 fe ; check_input
 70 01
+6a 26
+70 03
 6a 3c
 84 04
-a3 00
+
+a3 00 ; left
 8a 12
-08 00
+08 c0
 36 00
 70 df
 6a 36
-12 00
+12 c0
 84 04
-06 00
-12 00
+06 e0 ; left_border
+12 c0
 84 04
-a3 00
+
+a3 00 ; right
 8a 12
-08 00
+08 c0
 33 00
-70 f0
+70 f9
 6a 4c
-12 00
+12 c0
 84 04
-06 ef
-12 00
+06 f8 ; right_border
+12 c0
 84 04

@@ -15,7 +15,7 @@
 
 * Absolute (abs) `$nn`
 * Immediate (imm) `#$nn`
-* Indexed (idx) `$nn,a`
+* Indexed (idx) `#$nn,a`
 * Indirect (ind) `($nn)`
 
 ## Opcodes

@@ -84,7 +84,7 @@
       false,
       false
     ],
-    "note": "OP := DR & PC := PC+1 "
+    "note": "OP := DR & PC := PC+1"
   },
   {
     "bits": [
@@ -664,7 +664,7 @@
       true,
       false
     ],
-    "note": "[stb $nn,a] Z := DR + AX"
+    "note": "[stb #$nn,a] Z := DR + AX"
   },
   {
     "bits": [
@@ -675,7 +675,7 @@
       true,
       false,
       false,
-      true,
+      false,
       false,
       false,
       false,
@@ -693,7 +693,36 @@
       false,
       true
     ],
-    "note": "AR := Z & DR := Z"
+    "note": "AR := Z"
+  },
+  {
+    "bits": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false
+    ],
+    "note": "DR := BX"
   },
   {
     "bits": [
@@ -752,35 +781,6 @@
       false
     ],
     "note": "; execute"
-  },
-  {
-    "bits": [
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false
-    ],
-    "note": "; empty line"
   },
   {
     "bits": [

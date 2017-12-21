@@ -35,6 +35,7 @@
       outline: 0;
     }
 
+    input[type="button"],
     button {
       cursor: pointer;
     }
@@ -134,7 +135,12 @@
 <body onload="init()">
   <div class="panel">
     <h1>Micro instructions editor</h1>
-    <button onclick="add()">Add</button>
+    <form id="file-input-form">
+      <input type="file" id="file-input" style="display: none;">
+      <input type="button" onclick="loadFile()" value="Load File"></input>
+      <button onclick="saveFile()">Save File</button>
+      <button onclick="add()">Add</button>
+    </form>
   </div>
   <ul class="list" id="list"></ul>
   <textarea class="result" id="result" readonly></textarea>
@@ -180,7 +186,24 @@
       return parseInt(number).toString(16)
     }
 
-    function save() {
+    function convert(str) {
+      const lines = str.split('\n').filter(row => row.length > 0)
+
+      return lines.map(row => {
+        const bits = row.substring(12, 37).split('').map(bit => {
+          return bit === '1'
+        })
+
+        const note = row.substring(37)
+
+        return {
+          bits,
+          note,
+        }
+      })
+    }
+
+    function encode() {
       const data = []
       const items = document.querySelectorAll('.row')
 
@@ -199,8 +222,19 @@
         })
       }
 
-      const str = JSON.stringify(data)
-      window.localStorage.setItem(STORAGE_KEY, str)
+      return JSON.stringify(data)
+    }
+
+    function decode(data) {
+      data.forEach((row) => {
+        add(row.note, row.bits)
+      })
+
+      generate()
+    }
+
+    function save() {
+      window.localStorage.setItem(STORAGE_KEY, encode())
     }
 
     function load() {
@@ -208,12 +242,48 @@
         return
       }
       const data = JSON.parse(window.localStorage.getItem(STORAGE_KEY))
+      decode(data)
+    }
 
-      data.forEach((row) => {
-        add(row.note, row.bits)
-      })
+    function loadFile() {
+      elements.input.click()
+    }
 
-      generate()
+    function handleFile(event) {
+      const file = event.target.files[0]
+      const reader = new FileReader()
+
+      if (!file) {
+        return
+      }
+
+      reader.onload = readerEvent => {
+        const readerData = readerEvent.target.result
+        let result
+
+        try {
+          result = JSON.parse(readerData)
+        } catch(err) {
+          result = convert(readerData)
+        }
+
+        clear()
+        decode(result)
+
+        elements.form.reset()
+      }
+
+      reader.readAsText(file)
+    }
+
+    function saveFile() {
+      const data = encodeURIComponent(encode())
+      const elem = document.createElement('a')
+
+      elem.setAttribute('href', 'data:text/json;charset=utf-8,' + data)
+      elem.setAttribute('download', 'microcode.json')
+
+      elem.click()
     }
 
     function pad(str, size) {
@@ -225,14 +295,23 @@
       return result
     }
 
+    function clear() {
+      elements.list.innerHTML = ''
+    }
+
     function init() {
       elements.list = document.getElementById('list')
       elements.result = document.getElementById('result')
       elements.monitor = document.getElementById('monitor')
 
+      elements.input = document.getElementById('file-input')
+      elements.form = document.getElementById('file-input-form')
+
       elements.result.addEventListener('click', () => {
         elements.result.setSelectionRange(0, elements.result.value.length)
       })
+
+      elements.input.addEventListener('change', handleFile)
 
       load()
     }
@@ -255,7 +334,7 @@
       return bit
     }
 
-    function add(note, bits) {
+    function add(note, bits, target) {
       const row = document.createElement('li')
       row.classList.add('row')
 
@@ -288,7 +367,20 @@
 
       row.appendChild(remove)
 
-      elements.list.appendChild(row)
+      const insert = document.createElement('button')
+      insert.innerText = '+'
+      insert.addEventListener('click', () => {
+        add(null, null, row)
+        update()
+      })
+
+      row.appendChild(insert)
+
+      if (!target) {
+        elements.list.appendChild(row)
+      } else {
+        target.parentNode.insertBefore(row, target.nextSibling)
+      }
 
       update()
     }

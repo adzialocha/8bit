@@ -5,10 +5,11 @@
 lda #$00
 sta $c0           ; Spieler Position
 
+jmp draw          ; Zeichne initiale Spieler-Position
+
 ; Haupt-Routine
 
 main:
-  jsr draw        ; Zeichne aktuelle Spieler Position
   lda $fe         ; Tastaturbuffer abfragen
   cmp #$02        ; "<"?
   beq left
@@ -22,7 +23,7 @@ draw:
   lda $c0         ; Lade Spieler-Position in AX
   ldb #$ff        ; Lade Farbe Weiß in BX
   stb #$e0,a      ; Zeiche Spieler mit Farbe aus BX an Position AX
-rts
+  jmp main
 
 ; Routine: Spieler löschen
 
@@ -42,11 +43,11 @@ left:
   cmp #$ff        ; Haben wir den linken Rand erreicht?
   beq left_border
   sta $c0         ; Speichere neue Position
-  jmp main
+  jmp draw
 left_border:
   lda #$00         ; Setze Position auf maximalen linken Rand
   sta $c0
-  jmp main
+  jmp draw
 
 right:
   cib             ; Clear input buffer
@@ -56,8 +57,8 @@ right:
   cmp #$19        ; haben wir den rechten Rand erreicht?
   beq right_border
   sta $c0         ; Speichere neue Position
-  jmp main
+  jmp draw
 right_border:
   lda #$18        ; Setze Position auf maximalen rechten Rand
   sta $c0
-  jmp main
+  jmp draw

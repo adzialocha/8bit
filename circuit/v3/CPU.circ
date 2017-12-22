@@ -129,7 +129,6 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
     <wire from="(660,100)" to="(660,160)"/>
     <wire from="(200,290)" to="(340,290)"/>
     <wire from="(600,220)" to="(680,220)"/>
-    <wire from="(80,670)" to="(150,670)"/>
     <wire from="(550,190)" to="(560,190)"/>
     <wire from="(440,520)" to="(440,590)"/>
     <wire from="(350,400)" to="(730,400)"/>
@@ -195,7 +194,6 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
     <wire from="(90,320)" to="(190,320)"/>
     <wire from="(80,310)" to="(180,310)"/>
     <wire from="(140,150)" to="(170,150)"/>
-    <wire from="(80,630)" to="(80,670)"/>
     <wire from="(150,220)" to="(150,260)"/>
     <wire from="(140,210)" to="(140,250)"/>
     <wire from="(120,380)" to="(140,380)"/>
@@ -465,9 +463,6 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
       <a name="labelloc" val="north"/>
     </comp>
     <comp loc="(210,600)" name="KEY"/>
-    <comp lib="0" loc="(150,670)" name="Probe">
-      <a name="facing" val="west"/>
-    </comp>
     <comp lib="5" loc="(440,620)" name="LED">
       <a name="facing" val="north"/>
       <a name="color" val="#05f000"/>
@@ -3007,7 +3002,6 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
     <wire from="(320,580)" to="(320,590)"/>
     <wire from="(340,280)" to="(340,290)"/>
     <wire from="(400,260)" to="(400,290)"/>
-    <wire from="(340,360)" to="(340,390)"/>
     <wire from="(610,310)" to="(610,330)"/>
     <wire from="(370,560)" to="(410,560)"/>
     <wire from="(670,290)" to="(670,310)"/>
@@ -3058,6 +3052,7 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
     <wire from="(570,290)" to="(620,290)"/>
     <wire from="(490,690)" to="(490,700)"/>
     <wire from="(70,560)" to="(250,560)"/>
+    <wire from="(340,380)" to="(340,390)"/>
     <wire from="(570,290)" to="(570,310)"/>
     <wire from="(690,150)" to="(690,300)"/>
     <wire from="(370,500)" to="(410,500)"/>
@@ -3201,11 +3196,6 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
       <a name="labelloc" val="north"/>
     </comp>
     <comp lib="4" loc="(330,390)" name="J-K Flip-Flop"/>
-    <comp lib="5" loc="(340,360)" name="LED">
-      <a name="facing" val="south"/>
-      <a name="label" val="DISABLED"/>
-      <a name="labelloc" val="north"/>
-    </comp>
     <comp lib="1" loc="(530,310)" name="Controlled Buffer">
       <a name="facing" val="west"/>
       <a name="width" val="3"/>
@@ -3288,6 +3278,11 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
     <comp lib="1" loc="(780,310)" name="Controlled Buffer">
       <a name="facing" val="west"/>
       <a name="width" val="3"/>
+    </comp>
+    <comp lib="5" loc="(340,380)" name="LED">
+      <a name="facing" val="south"/>
+      <a name="label" val="DISABLED"/>
+      <a name="labelloc" val="north"/>
     </comp>
     <comp lib="6" loc="(6,19)" name="Text">
       <a name="text" val="KEYBOARD CONTROLLER"/>

@@ -411,14 +411,14 @@ void handle_opcode_and_operand (int *program, int index, int op, char *addr)
     {
         // Indirect indexed adressing mode
         program[index] = OPCODES[op].a_ind_idx;
-        stripped_addr = addr + 1;
+        stripped_addr = addr + 2;
         stripped_addr[strlen(stripped_addr) - 3] = 0;
     }
     else if (is_idx_ind(addr))
     {
         // Indexed indirect adressing mode
         program[index] = OPCODES[op].a_idx_ind;
-        stripped_addr = addr + 1;
+        stripped_addr = addr + 2;
         stripped_addr[strlen(stripped_addr) - 3] = 0;
     }
 

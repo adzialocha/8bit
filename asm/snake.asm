@@ -25,7 +25,7 @@
 ; starting from memory address $d0 (as an array).
 ; on top we keep the ...
 
-lda #$eb              ; position
+lda #$00              ; position
 sta $dd               ; ... of snake head
 
 lda #$02              ; length
@@ -34,12 +34,12 @@ sta $de               ; ... of snake body
 ; we store the current direction of the snake
 ; with the following constants:
 ;
-; 00 = moving up
-; 01 = moving right
-; 02 = moving down
-; 03 = moving left
+; 01 = moving up
+; 02 = moving left
+; 03 = moving down
+; 04 = moving right
 
-lda #$01              ; current direction
+lda #$04              ; current direction
 sta $df               ; ... of snake
 
 ; main loop routine
@@ -47,39 +47,96 @@ sta $df               ; ... of snake
 main:
   jsr move
   jsr draw_snake
+  jsr wait
   jmp main
 
-; routine: move snake to next position
+; routine: check pressed keys & check if the move is maybe illegal
 
 move:
-  lda $da             ; get snake direction
+  lda $fe             ; get currently pressed key
 
-  cmp #$00            ; jump to subroutine
-  beq move_up         ; ... for according
-  cmp #$01            ; direction
-  beq move_right
-  cmp #$02
-  beq move_down
-  cmp #$03
+  cmp #$01            ; [up] pressed?
+  beq move_up
+  cmp #$02            ; [left] pressed?
   beq move_left
+  cmp #$03            ; [down] pressed?
+  beq move_down
+  cmp #$04            ; [right] pressed?
+  beq move_right
 rts
 
 move_up:
+  lda $da             ; get snake direction
 
-rts
+  cmp #$03            ; check if we are going down
+  beq move_illegal    ; ... which would be an illegal move
 
-move_right:
+  lda #$01            ; take up
+  sta $da             ; ... as the next direction
 
-rts
-
-move_down:
-
+  lda $dd
+  sbc #$05
+  sta $dd
 rts
 
 move_left:
+  lda $da             ; get snake direction
 
+  cmp #$04            ; check if we are going right
+  beq move_illegal    ; ... which would be an illegal move
+
+  lda #$02            ; take left
+  sta $da             ; ... as the next direction
+
+  lda $dd             ; load snake head position
+  dec                 ; ... decrement it by one
+  sta $dd             ; ... store it again
 rts
 
-draw_snake:
+move_down:
+  lda $da             ; get snake direction
 
+  cmp #$01            ; check if we are going up
+  beq move_illegal    ; ... which would be an illegal move
+
+  lda #$03            ; take down
+  sta $da             ; ... as the next direction
+
+  lda $dd
+  adc #$05
+  sta $dd
+rts
+
+move_right:
+  lda $da             ; get snake direction
+
+  cmp #$02            ; check if we are going left
+  beq move_illegal    ; ... which would be an illegal move
+
+  lda #$04            ; take right
+  sta $da             ; ... as the next direction
+
+  lda $dd             ; load snake head position
+  inc                 ; ... increment it by one
+  sta $dd             ; ... store it again
+rts
+
+move_illegal:
+  rts
+
+; routine: draw snake on screen
+
+draw_snake:
+  lda $dd             ; get snake head
+  ldb #$ff            ; prepare set pixel for display
+  stb $e5,a           ; draw head at screen position
+rts
+
+; routine: wait loop
+
+wait:
+  lda #$10
+wait_loop:
+  dec
+  bne wait_loop
 rts

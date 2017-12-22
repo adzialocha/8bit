@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define VERSION                 "0.1"
+#define VERSION                 "0.2"
 
 #define PROGRAM_MEMORY_SIZE     256
 
@@ -51,14 +51,16 @@ typedef struct
 {
     char mnemonic[3];   // Mnemonic of opcode
 
-    int a;              // Single-byte instruction (no operand)
+    int a;              // Implicit / single-byte instruction (no operand)
 
-    int a_abs;          // Absolute  $00
-    int a_imm;          // Immediate #$00
-    int a_idx;          // Indexed   $00,a
-    // int a_ind;       // Indirect  ($00) @TODO
+    int a_abs;          // Absolute             $nn
+    int a_imm;          // Immediate            #$nn
+    int a_idx;          // Indexed              $nn,a
+    int a_idx_ind;      // Indexed Indirect     ($nn,a)
+    int a_ind;          // Indirect             ($nn)
+    int a_ind_idx;      // Indirect Indexed     ($nn),a
 
-    int a_label;        // Labelled
+    int a_label;        // Labelled (internal)
 } opcode;
 
 
@@ -71,39 +73,39 @@ typedef struct
 
 static const opcode OPCODES[] =
 {
-    { "adc", 0x00, 0x26, 0x23, 0x00, 0x00 },
-    { "and", 0x00, 0x3c, 0x39, 0x00, 0x00 },
-    { "asl", 0x57, 0x00, 0x00, 0x00, 0x00 },
-    { "bcc", 0x00, 0x00, 0x64, 0x00, 0x64 },
-    { "bcs", 0x00, 0x00, 0x66, 0x00, 0x66 },
-    { "beq", 0x00, 0x00, 0x6a, 0x00, 0x6a },
-    { "bmi", 0x00, 0x00, 0x62, 0x00, 0x62 },
-    { "bne", 0x00, 0x00, 0x68, 0x00, 0x68 },
-    { "bpl", 0x00, 0x00, 0x60, 0x00, 0x60 },
-    { "cib", 0xa3, 0x00, 0x00, 0x00, 0x00 },
-    { "clc", 0x6e, 0x00, 0x00, 0x00, 0x00 },
-    { "cmp", 0x00, 0x72, 0x70, 0x00, 0x00 },
-    { "dec", 0x36, 0x00, 0x00, 0x00, 0x00 },
-    { "eor", 0x00, 0x4c, 0x49, 0x00, 0x00 },
-    { "inc", 0x33, 0x00, 0x00, 0x00, 0x00 },
-    { "jmp", 0x00, 0x86, 0x84, 0x00, 0x84 },
-    { "jsr", 0x00, 0x94, 0x8a, 0x00, 0x8a },
-    { "lda", 0x00, 0x08, 0x06, 0x00, 0x00 },
-    { "ldb", 0x00, 0x0e, 0x0c, 0x00, 0x00 },
-    { "lsl", 0x51, 0x00, 0x00, 0x00, 0x00 },
-    { "lsr", 0x54, 0x00, 0x00, 0x00, 0x00 },
-    { "ora", 0x00, 0x44, 0x41, 0x00, 0x00 },
-    { "pha", 0x76, 0x00, 0x00, 0x00, 0x00 },
-    { "pop", 0x7e, 0x00, 0x00, 0x00, 0x00 },
-    { "rol", 0x51, 0x00, 0x00, 0x00, 0x00 },
-    { "ror", 0x5d, 0x00, 0x00, 0x00, 0x00 },
-    { "rts", 0x9d, 0x00, 0x00, 0x00, 0x00 },
-    { "sbc", 0x00, 0x2e, 0x2b, 0x00, 0x00 },
-    { "sec", 0x6c, 0x00, 0x00, 0x00, 0x00 },
-    { "sta", 0x00, 0x12, 0x00, 0x00, 0x00 },
-    { "stb", 0x00, 0x1b, 0x00, 0x16, 0x00 },
-    { "tab", 0x1f, 0x00, 0x00, 0x00, 0x00 },
-    { "tba", 0x21, 0x00, 0x00, 0x00, 0x00 }
+    { "adc", 0x00, 0x5a, 0x57, 0x00, 0x00, 0x00, 0x00, 0x00 },
+    { "and", 0x00, 0x70, 0x6d, 0x00, 0x00, 0x00, 0x00, 0x00 },
+    { "asl", 0x8b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
+    { "bcc", 0x00, 0x00, 0x98, 0x00, 0x00, 0x00, 0x00, 0x98 },
+    { "bcs", 0x00, 0x00, 0x9a, 0x00, 0x00, 0x00, 0x00, 0x9a },
+    { "beq", 0x00, 0x00, 0x9e, 0x00, 0x00, 0x00, 0x00, 0x9e },
+    { "bmi", 0x00, 0x00, 0x96, 0x00, 0x00, 0x00, 0x00, 0x96 },
+    { "bne", 0x00, 0x00, 0x9c, 0x00, 0x00, 0x00, 0x00, 0x9c },
+    { "bpl", 0x00, 0x00, 0x94, 0x00, 0x00, 0x00, 0x00, 0x94 },
+    { "cib", 0xd7, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
+    { "clc", 0xa2, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
+    { "cmp", 0x00, 0xa6, 0xa4, 0x00, 0x00, 0x00, 0x00, 0x00 },
+    { "dec", 0x6a, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
+    { "eor", 0x00, 0x80, 0x7d, 0x00, 0x00, 0x00, 0x00, 0x00 },
+    { "inc", 0x67, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
+    { "jmp", 0x00, 0xba, 0xb8, 0x00, 0x00, 0x00, 0x00, 0xb8 },
+    { "jsr", 0x00, 0xc8, 0xbe, 0x00, 0x00, 0x00, 0x00, 0xbe },
+    { "lda", 0x00, 0x08, 0x06, 0x00, 0x00, 0x0c, 0x00, 0x00 },
+    { "ldb", 0x00, 0x14, 0x12, 0x00, 0x25, 0x18, 0x1e, 0x00 },
+    { "lsl", 0x85, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
+    { "lsr", 0x88, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
+    { "ora", 0x00, 0x78, 0x75, 0x00, 0x00, 0x00, 0x00, 0x00 },
+    { "pha", 0xaa, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
+    { "pop", 0xb2, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
+    { "rol", 0x8e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
+    { "ror", 0x91, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
+    { "rts", 0xd1, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
+    { "sbc", 0x00, 0x62, 0x5f, 0x00, 0x00, 0x00, 0x00, 0x00 },
+    { "sec", 0xa0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
+    { "sta", 0x00, 0x2c, 0x00, 0x00, 0x00, 0x30, 0x00, 0x00 },
+    { "stb", 0x00, 0x3b, 0x00, 0x36, 0x4c, 0x3f, 0x45, 0x00 },
+    { "tab", 0x53, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
+    { "tba", 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }
 };
 
 
@@ -191,6 +193,135 @@ bool is_hex_str (char *str)
 
 
 /*
+ * Function: is_abs, is_idx, is_imm, is_idx_ind, is_ind, is_ind_idx
+ * ------
+ * Checks if address string uses an specific addressing mode
+ *
+ * token: The string to check against
+ *
+ * returns: 1 if string uses the adressing mode, otherwise 0
+ */
+
+bool is_abs (char *token)
+{
+    if (
+        token[0] == '$' &&
+        token[strlen(token) - 2] != ','
+    )
+    {
+        return 1;
+    }
+
+    return 0;
+}
+
+
+bool is_idx (char *token)
+{
+    if (
+        token[0] == '$' &&
+        token[strlen(token) - 2] == ',' &&
+        token[strlen(token) - 1] == 'a'
+    )
+    {
+        return 1;
+    }
+
+    return 0;
+}
+
+
+bool is_imm (char *token)
+{
+    if (token[0] == '#')
+    {
+        return 1;
+    }
+
+    return 0;
+}
+
+
+bool is_idx_ind (char *token)
+{
+    if (
+        token[0] == '(' &&
+        token[1] == '$' &&
+        token[strlen(token) - 3] == ',' &&
+        token[strlen(token) - 2] == 'a' &&
+        token[strlen(token) - 1] == ')'
+    )
+    {
+        return 1;
+    }
+
+    return 0;
+}
+
+
+bool is_ind (char *token)
+{
+    if (
+        token[0] == '(' &&
+        token[1] == '$' &&
+        token[strlen(token) - 3] != ',' &&
+        token[strlen(token) - 2] != 'a' &&
+        token[strlen(token) - 1] == ')'
+    )
+    {
+        return 1;
+    }
+
+    return 0;
+}
+
+
+bool is_ind_idx (char *token)
+{
+    if (
+        token[0] == '(' &&
+        token[1] == '$' &&
+        token[strlen(token) - 3] != ')' &&
+        token[strlen(token) - 2] != ',' &&
+        token[strlen(token) - 1] == 'a'
+    )
+    {
+        return 1;
+    }
+
+    return 0;
+}
+
+
+/*
+ * Function: is_valid_address
+ * ------
+ * Checks if token is a correct address mode
+ *
+ * opcode_index: Used opcode
+ * str: The processed string
+ *
+ * returns: 1 if string is a valid address, otherwise 0
+ */
+
+bool is_valid_address (int opcode_index, char *str)
+{
+    if (
+        (OPCODES[opcode_index].a_abs && is_abs(str)) ||
+        (OPCODES[opcode_index].a_ind && is_ind(str)) ||
+        (OPCODES[opcode_index].a_imm && is_imm(str)) ||
+        (OPCODES[opcode_index].a_ind_idx && is_ind_idx(str)) ||
+        (OPCODES[opcode_index].a_idx_ind && is_idx_ind(str)) ||
+        (OPCODES[opcode_index].a_idx && is_idx(str))
+    )
+    {
+        return 1;
+    }
+
+    return 0;
+}
+
+/*
  * Function: find_opcode_index
  * ------
  * Returns the index of the opcode lookup table
@@ -250,24 +381,45 @@ void handle_opcode_and_operand (int *program, int index, int op, char *addr)
 {
     char* stripped_addr;
 
-    if (addr[0] == '#' && addr[strlen(addr) - 2] != ',')
+    if (is_imm(addr))
     {
         // Immediate adressing mode
         program[index] = OPCODES[op].a_imm;
         stripped_addr = addr + 2;
     }
-    else if (strlen(addr) > 3 && addr[strlen(addr) - 2] == ',')
+    else if (is_idx(addr))
     {
         // Indexed adressing mode
         program[index] = OPCODES[op].a_idx;
-        stripped_addr = addr + 2;
+        stripped_addr = addr + 1;
         stripped_addr[strlen(stripped_addr) - 2] = 0;
     }
-    else
+    else if (is_abs(addr))
     {
         // Absolute adressing mode
         program[index] = OPCODES[op].a_abs;
         stripped_addr = addr + 1;
+    }
+    else if (is_ind(addr))
+    {
+        // Indirect adressing mode
+        program[index] = OPCODES[op].a_ind;
+        stripped_addr = addr + 1;
+        stripped_addr[strlen(stripped_addr) - 1] = 0;
+    }
+    else if (is_ind_idx(addr))
+    {
+        // Indirect indexed adressing mode
+        program[index] = OPCODES[op].a_ind_idx;
+        stripped_addr = addr + 1;
+        stripped_addr[strlen(stripped_addr) - 3] = 0;
+    }
+    else if (is_idx_ind(addr))
+    {
+        // Indexed indirect adressing mode
+        program[index] = OPCODES[op].a_idx_ind;
+        stripped_addr = addr + 1;
+        stripped_addr[strlen(stripped_addr) - 3] = 0;
     }
 
     if (!is_hex_str(stripped_addr))
@@ -393,25 +545,7 @@ int main (int argc, char **argv)
             // Expects operand (address or label) of two-byte instruction
             if (opcode_index > -1)
             {
-                if
-                (
-                    (
-                        OPCODES[opcode_index].a_idx &&
-                        token[0] == '#' &&
-                        token[1] == '$' &&
-                        token[strlen(token) - 2] == ',' &&
-                        token[strlen(token) - 1] == 'a'
-                    ) ||
-                    (
-                        OPCODES[opcode_index].a_abs &&
-                        token[0] == '$'
-                    ) ||
-                    (
-                        OPCODES[opcode_index].a_imm &&
-                        token[0] == '#' &&
-                        token[strlen(token) - 2] != ','
-                    )
-                )
+                if (is_valid_address(opcode_index, token))
                 {
                     // Found an address
                     handle_opcode_and_operand(
@@ -421,10 +555,7 @@ int main (int argc, char **argv)
                         token
                     );
                 }
-                else if
-                (
-                    OPCODES[opcode_index].a_label
-                )
+                else if (OPCODES[opcode_index].a_label)
                 {
                     // Found a label
                     if (jump_table_count > MAX_JUMP_COUNT)

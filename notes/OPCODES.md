@@ -13,10 +13,13 @@
 
 ## Addressing modes
 
-* Absolute (abs) `$nn`
-* Immediate (imm) `#$nn`
-* Indexed (idx) `#$nn,a`
-* Indirect (ind) `($nn)`
+* Implicit
+* Absolute `$nn`
+* Immediate `#$nn`
+* Indexed `$nn,a`
+* Indexed indirect `($nn,a)`
+* Indirect `($nn)`
+* Indirect indexed `($nn),a`
 
 ## Opcodes
 
@@ -24,11 +27,16 @@
 
 * `lda #$nn`
 * `lda $nn`
+* `lda ($nn)`
 * `ldb #$nn`
 * `ldb $nn`
+* `ldb ($nn)`
 * `sta $nn`
-* `stb $nn,a`
+* `sta ($nn)`
 * `stb $nn`
+* `stb $nn,a`
+* `stb ($nn),a`
+* `stb ($nn,a)`
 * `tab` transfer from AX to BX
 * `tba` transfer from BX to AX
 
@@ -87,6 +95,63 @@
 * `jsr {$nn}` jump to location {$nn} and save return address
 * `rts` return from subroutine
 
-### Special
+### Input
 
 * `cib` clear input buffer
+
+## Microcode addresses
+
+```
+adc #$nn - $57
+adc $nn - $5a
+and #$nn - $6d
+and $nn - $70
+asl - $8b
+bcc - $98
+bcs - $9a
+beq - $9e
+bmi - $96
+bne - $9c
+bpl - $94
+cib - $d7
+clc - $a2
+cmp #$nn - $a4
+cmp $nn - $a6
+dec - $6a
+eor #$nn - $7d
+eor $nn - $80
+inc - $67
+jmp #$nn - $b8
+jmp $nn - $ba
+jsr #$nn - $be
+jsr $nn - $c8
+lda #$nn - $06
+lda $nn - $08
+lda ($nn) - $0c
+ldb #$nn - $12
+ldb $nn - $14
+ldb ($nn) - $18
+ldb ($nn),a - $1e
+ldb ($nn,a) - $25
+lsl - $85
+lsr - $88
+ora #$nn - $75
+ora $nn - $78
+pha - $aa
+pop - $b2
+rol - $8e
+ror - $91
+rts - $d1
+sbc #$nn - $5f
+sbc $nn - $62
+sec - $a0
+sta $nn - $2c
+sta ($nn) - $30
+stb $nn - $3b
+stb $nn,a - $36
+stb ($nn) - $3f
+stb ($nn),a - $45
+stb ($nn,a) - $4c
+tab - $53
+tba - $55
+```

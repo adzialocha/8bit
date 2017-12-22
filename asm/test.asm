@@ -22,7 +22,7 @@ main:
 draw:
   lda $c0         ; Lade Spieler-Position in AX
   ldb #$ff        ; Lade Farbe Weiß in BX
-  stb #$e5,a      ; Zeiche Spieler mit Farbe aus BX an Position AX
+  stb $e5,a       ; Zeiche Spieler mit Farbe aus BX an Position AX
   jmp main
 
 ; Routine: Spieler löschen
@@ -30,7 +30,7 @@ draw:
 clear:
   lda $c0         ; Lade Spieler-Position in AX
   ldb #$00        ; Lade Farbe Schwarz in BX
-  stb #$e5,a      ; Schreibe schwarz (leer) an Stelle des Spielers
+  stb $e5,a       ; Schreibe schwarz (leer) an Stelle des Spielers
 rts
 
 ; Routine: Spieler nach links oder rechts bewegen

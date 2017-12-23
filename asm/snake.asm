@@ -22,11 +22,18 @@
 ; f9 fa fb fc fd
 
 ; the segment positions of the body we organize
-; starting from memory address $d0 (as an array).
-; on top we keep the ...
+; as addresses pointing at the screen positions.
 
-lda #$00              ; position
-sta $dd               ; ... of snake head
+lda #$eb              ; position
+sta $d0               ; ... of snake head
+
+lda #$ec              ; first segment
+sta $d1               ; ... of snake body
+
+lda #$ed              ; second segment
+sta $d2               ; ... of snake body
+
+; additionally we keep the ...
 
 lda #$02              ; length
 sta $de               ; ... of snake body
@@ -34,10 +41,10 @@ sta $de               ; ... of snake body
 ; we store the current direction of the snake
 ; with the following constants:
 ;
-; 01 = moving up
-; 02 = moving left
-; 03 = moving down
-; 04 = moving right
+; $01 = moving up
+; $02 = moving left
+; $03 = moving down
+; $04 = moving right
 
 lda #$04              ; current direction
 sta $df               ; ... of snake
@@ -45,10 +52,24 @@ sta $df               ; ... of snake
 ; main loop routine
 
 main:
+  jsr update
   jsr move
+  jsr collision
   jsr draw_snake
   jsr wait
   jmp main
+
+; routine: pass over body segments to next position ahead
+
+update:
+  lda $de             ; get snake length
+  dec
+update_loop:
+  ldb $d0,a           ; get body segment
+  stb $d1,a           ; ... store it one address after
+  dec
+  bpl update_loop
+rts
 
 ; routine: check pressed keys & check if the move is maybe illegal
 
@@ -66,76 +87,84 @@ move:
 rts
 
 move_up:
-  lda $da             ; get snake direction
+  lda $df             ; get snake direction
 
   cmp #$03            ; check if we are going down
   beq move_illegal    ; ... which would be an illegal move
 
   lda #$01            ; take up
-  sta $da             ; ... as the next direction
+  sta $df             ; ... as the next direction
 
-  lda $dd
-  sbc #$05
-  sta $dd
+  lda $d0             ; load snake head position
+  sbc #$05            ; ... substract a whole screen line
+  sta $d0             ; ... store it again
 rts
 
 move_left:
-  lda $da             ; get snake direction
+  lda $df             ; get snake direction
 
   cmp #$04            ; check if we are going right
   beq move_illegal    ; ... which would be an illegal move
 
   lda #$02            ; take left
-  sta $da             ; ... as the next direction
+  sta $df             ; ... as the next direction
 
-  lda $dd             ; load snake head position
+  lda $d0             ; load snake head position
   dec                 ; ... decrement it by one
-  sta $dd             ; ... store it again
+  sta $d0             ; ... store it again
 rts
 
 move_down:
-  lda $da             ; get snake direction
+  lda $df             ; get snake direction
 
   cmp #$01            ; check if we are going up
   beq move_illegal    ; ... which would be an illegal move
 
   lda #$03            ; take down
-  sta $da             ; ... as the next direction
+  sta $df             ; ... as the next direction
 
-  lda $dd
-  adc #$05
-  sta $dd
+  lda $d0             ; load snake head position
+  adc #$05            ; ... add a whole screen line
+  sta $d0             ; ... store it again
 rts
 
 move_right:
-  lda $da             ; get snake direction
+  lda $df             ; get snake direction
 
   cmp #$02            ; check if we are going left
   beq move_illegal    ; ... which would be an illegal move
 
   lda #$04            ; take right
-  sta $da             ; ... as the next direction
+  sta $df             ; ... as the next direction
 
-  lda $dd             ; load snake head position
+  lda $d0             ; load snake head position
   inc                 ; ... increment it by one
-  sta $dd             ; ... store it again
+  sta $d0             ; ... store it again
 rts
 
 move_illegal:
-  rts
+rts
+
+; routine: check if snake collided with apple or wall or itself
+
+collision:
+rts
 
 ; routine: draw snake on screen
 
 draw_snake:
-  lda $dd             ; get snake head
+  lda $de             ; get snake length
+  ldb #$00            ; prepare clear pixel
+  stb ($d0,a)
+
   ldb #$ff            ; prepare set pixel for display
-  stb $e5,a           ; draw head at screen position
+  stb ($d0)           ; draw head at screen position
 rts
 
 ; routine: wait loop
 
 wait:
-  lda #$10
+  lda #$10            ; count down from 10 to 0
 wait_loop:
   dec
   bne wait_loop

@@ -10,13 +10,13 @@
 
 ## Operations
 
-* `0000` Z = X + Y
-* `0001` Z = X - Y
-* `0010` Z = X AND Y
-* `0011` Z = X OR Y
-* `0100` Z = X XOR Y
-* `0101` Z = Y logically shifted left
-* `0110` Z = Y logically shifted right
-* `0111` Z = Y arithmetically shifted left
-* `1000` Z = Y rotated left
-* `1001` Z = Y rotated right
+* `0001` Z = X + Y
+* `0010` Z = X - Y
+* `0011` Z = X AND Y
+* `0100` Z = X OR Y
+* `0101` Z = X XOR Y
+* `0110` Z = Y logically shifted left
+* `0111` Z = Y logically shifted right
+* `1000` Z = Y arithmetically shifted left
+* `1001` Z = Y rotated left
+* `1010` Z = Y rotated right
